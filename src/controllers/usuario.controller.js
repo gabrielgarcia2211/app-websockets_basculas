@@ -3,7 +3,6 @@ const Ports = require('../../config/ports')
 
 
 let dataUser = null;
-activateProceso();
 
 
 exports.findAll = function (req, res) {
@@ -94,11 +93,11 @@ function activateProceso(req, res) {
             let pa = listPorts[i].parser;
 
 
-            pa.on('write', (data) => {
-                console.log(data);
-               // io.emit('port:data', {
-               //     value: data + "/" + pu.path
-               // });
+            pa.on('data', (data) => {
+               // console.log(data);
+                io.emit('port:data', {
+                    value: data + "/" + pu.path
+                });
             })
     
             pu.on('error', function (err) {

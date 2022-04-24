@@ -60,6 +60,8 @@ socket.on("port:error", function (error, ports) {
 });
 
 function map(arr) {
+  //444 - > arr[0]
+  //COM1 -> arra[1]
   let key = arr[1].substr(-1);
   let dispatch = true;
   switch (arr[1]) {
