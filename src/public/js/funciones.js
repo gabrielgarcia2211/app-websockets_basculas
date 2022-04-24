@@ -124,7 +124,7 @@ function enviarData(id) {
   }).then((result) => {
     /* Read more about isConfirmed, isDenied below */
     if (result.isConfirmed) {
-      if (data_3 != "") {
+      if (data_3 != " ") {
         $.ajax({
           type: "post",
           url: "/app/user/create",
@@ -204,7 +204,7 @@ function captData(start, id, data) {
         "../../../app/control/create",
         { registro: data, id_bascula: arr[2] },
         function (resp_post) {
-          //aca hacemos validacion de vagoneta en back para que este encendida PENDIENTE (OJO)
+       
 
           for (let index = 0; index < resp_post.total; index++) {
             resp_post.suma -= resp_post.registro;
