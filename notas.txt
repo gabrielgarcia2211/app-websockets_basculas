@@ -1,0 +1,3 @@
+Lllamado de los puertos COM
+- funciones.js
+- usuario.controller.js

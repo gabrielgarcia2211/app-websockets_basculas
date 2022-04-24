@@ -1,0 +1,13 @@
+.led {
+  height: 70px;
+  width: 70px;
+  border-radius: 50px;
+  background: #c7f1ff;
+  display: inline-block;
+  text-align: center;
+  -moz-border-radius: 50px;
+  -webkit-border-radius: 50px;
+  -webkit-box-shadow: 2px 5px 3px 0px rgba(157, 157, 157, 0.75);
+  -moz-box-shadow: 2px 5px 3px 0px rgba(157, 157, 157, 0.75);
+  box-shadow: 2px 5px 3px 0px rgba(157, 157, 157, 0.75);
+}
