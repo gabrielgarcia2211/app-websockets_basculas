@@ -31,6 +31,15 @@
 
 <body style="background-color: #0091AD;">
 
+<div class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
+  <div class="d-flex">
+    <div class="toast-body">
+      <p id="toast-text"></p>
+    </div>
+    <button type="button" class="btn-close me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+</div>
+
   <nav class="navbar navbar-light bg" style="background-color: #26262e;">
     <div class="container">
       <a class="navbar-brand" href="index.html">
@@ -62,7 +71,7 @@
               <p><b>#{cont} de Bascula</b></p>
             </div>
             <div class="card-body">
-            form(id="form-user-"+cont, onsubmit="enviarData(this.id)",  onchange="captNombre(this.id)")
+            form(id="form-user-"+cont, onsubmit="enviarData(this.id)",  onchange="")
               - nombre = "";
               - if ((dataUser[cont_temp]) && dataUser[cont_temp].id_bascula == cont) {
                 - nombre = dataUser[cont_temp].nombre ;
@@ -106,6 +115,7 @@
 
   </div>
   <br><br><br>
+  
 </body>
 
 </html>
