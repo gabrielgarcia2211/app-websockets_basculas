@@ -4,10 +4,10 @@ const Ports = require('../../config/ports')
 
 let dataUser = null;
 
-
+activateProceso();
 exports.findAll = function (req, res) {
 
-    activateProceso();
+    
     Usuario.findAll(function (err, usuario) {
         if (err)
             res.send(err);
@@ -66,13 +66,6 @@ function activateProceso(req, res) {
         'COM2',
         'COM3',
         'COM4',
-        'COM5',
-        'COM6',
-        'COM7',
-        'COM8',
-        'COM8',
-        'COM9',
-        'COM10',
     ]
 
     let limiter = '\r\n'
@@ -82,25 +75,26 @@ function activateProceso(req, res) {
     let listErrors = '';
 
 
-    listPorts = Ports.configPuerts(listName, baudRate, limiter);
+    Ports.configPuerts(listName, baudRate, limiter);
    
 
-    if(listPorts.length > 0){
+    /*if(listPorts.length > 0){
+        
 
         for (var i = 0; i < listPorts.length; i++) {
-
+         
             let pu = listPorts[i].puerto;
             let pa = listPorts[i].parser;
 
-
+              
             pa.on('data', (data) => {
-               // console.log(data);
-                io.emit('port:data', {
+                console.log(data.toString());
+               /* io.emit('port:data', {
                     value: data + "/" + pu.path
                 });
             })
     
-            pu.on('error', function (err) {
+           /* pu.on('error', function (err) {
                 listErrors += err.message + "\n";
                 if (true) {
                     setTimeout(() => {
@@ -111,21 +105,21 @@ function activateProceso(req, res) {
                     }, 1500)
                 }
 
-                console.log(err.message)
+               // console.log(err.message)
     
             })
     
     
         }
     }else{
-
+        console.log('nada')
         setTimeout(() => {
             io.emit('port:error', {
                 value: 'No hay puertos disponibles!.',
                 ports: false
             });
         }, 1500)
-    }
+    }*/
 
 };
 

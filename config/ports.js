@@ -17,19 +17,22 @@ function configPuerts (listName, baudRate, limiter) {
             path: temp, baudRate: baudRate
         })
         //parseamos los datos de entrada
-        const parser = puerto.pipe(new ReadlineParser("\n"))
+        const parser = puerto.pipe(new ReadlineParser())
 
-
-        //temp.on('data', showPortOpen(temp));
-        tempList.push({
+        /*tempList.push({
             'puerto': puerto,
             'parser': parser,
+        })*/
+
+        parser.on('data', function(data){
+            console.log('serial:' + puerto.path + ":   " + data)
         })
+        puerto.on('error', console.log)
 
 
     }
 
-    return tempList;
+   
 }
 
 
