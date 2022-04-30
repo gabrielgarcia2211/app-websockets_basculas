@@ -29,7 +29,7 @@ function sesion() {
   var user = document.getElementById('user').value;
   var password = document.getElementById('password').value;
   if (user == "admin" && password == "admin") {
-    window.location.href = "../user/index.pug";
+    window.location.href = "../app/user/all/";
   } else {
     window.alert("error");
   }
