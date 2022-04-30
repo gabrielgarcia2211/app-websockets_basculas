@@ -1,33 +1,39 @@
 var socket = io();
 
-/** REGLAS DE ENTRADA DE LOS LED */
-var nombre = 0;
-var data = 0;
-var total = 0;
-var vagoneta = 0;
-let bascula = [nombre, data, total, vagoneta];
-localStorage.setItem('COM1', JSON.stringify(bascula));
-localStorage.setItem('COM2', JSON.stringify(bascula));
-localStorage.setItem('COM3', JSON.stringify(bascula));
-localStorage.setItem('COM4', JSON.stringify(bascula));
-localStorage.setItem('COM5', JSON.stringify(bascula));
-localStorage.setItem('COM6', JSON.stringify(bascula));
-localStorage.setItem('COM7', JSON.stringify(bascula));
-localStorage.setItem('COM8', JSON.stringify(bascula));
-let prueba = localStorage.getItem('COM2');
-let valor = JSON.parse(prueba)
-console.log(valor[0]);
+let listName = [
+  'COM1',
+  'COM2',
+  'COM3',
+  'COM4',
+  'COM5',
+  'COM6',
+  'COM7',
+  'COM8',
+]
 
-function sesion(){
-  var user = document.getElementById('user').value;
-  var password = document.getElementById('password').value;
-  if(user==="admin" && password==="admin"){
-    window.location.href = "../user/index.pug";
-  }else{
-    window.alert("error");
+
+$(document).ready(function () {
+  init();
+
+})
+
+function init() {
+  for (let i = 0; i < listName.length; i++) {
+    let key = listName[i].substr(-1);
+    document.getElementById("led-" + key).style.background = '#5FFF23';
+    document.getElementById("guardar-" + key).disabled = false;
   }
 }
 
+function sesion() {
+  var user = document.getElementById('user').value;
+  var password = document.getElementById('password').value;
+  if (user == "admin" && password == "admin") {
+    window.location.href = "../user/index.pug";
+  } else {
+    window.alert("error");
+  }
+}
 
 const Toast = Swal.mixin({
   toast: true,
@@ -43,52 +49,41 @@ const Toast = Swal.mixin({
 });
 
 socket.on("port:data", function (dataSerial) {
-  let arr = dataSerial.value.split("/");
-  data_localstorage(arr);
+  arr = dataSerial.value.split("/");
   map(arr);
 });
 
-socket.on("port:error", function (error, ports) {
-  const Toast = Swal.mixin({
-    toast: true,
-    position: "top-end",
-    showConfirmButton: false,
-    width: 500,
-    timer: 4000,
-    timerProgressBar: true,
-    didOpen: (toast) => {
-      toast.addEventListener("mouseenter", Swal.stopTimer);
-      toast.addEventListener("mouseleave", Swal.resumeTimer);
-    },
-  });
-
-  //Segmentacion de substrings
-
+socket.on("port:error", function (error) {
+  init();
   let part = error.value.split("\n");
   let segm = "";
-  for (let i = 0; i < part.length; i++) {
-    segm = part[i].split(":");
+  let key = "";
 
-    let key = segm[0].substr(-1);
+  for (let i = 0; i < 8; i++) {
+
+    try {
+      segm = part[i].split(":");
+      key = segm[0].substr(-1);
+
+      if (segm[1] === " File not found") {
+        document.getElementById("led-" + key).style.background = '#FF4F23';
+        document.getElementById("guardar-" + key).disabled = true;
+      }
+    } catch (error) {
+      //console.log(error);
+    }
 
   }
-
-
-
-  //let key = segm[0].substr(-1);
-  //console.log(key)
-
-  // 
 
   Toast.fire({
     icon: "warning",
     title: error.value,
   });
+
+
 });
 
 function map(arr) {
-  //444 - > arr[0]
-  //COM1 -> arra[1]
   let key = arr[1].substr(-1);
   let dispatch = true;
   switch (arr[1]) {
@@ -132,6 +127,65 @@ function map(arr) {
   captData(dispatch, "form-user-" + key, arr[0]);
 }
 
+function captData(start, id, data) {
+
+  if (start) {
+    //segmentacion del arreglo
+    let form = document.getElementById(id);
+    var vagoneta = form.elements["vagoneta"].value;
+    let arr = id.split("-");
+
+    if (vagoneta == "") {
+
+      Toast.fire({
+        icon: "warning",
+        title: "Primer Registro de la vagoneta " + arr[2],
+      });
+
+      $.post(
+        "../../../app/control/create",
+        { registro: data, id_bascula: arr[2] },
+        function (resp) {
+          if (!resp.error) {
+            form.elements["data-" + arr[2]].value = "";
+            form.elements["vagoneta"].value = data;
+          } else {
+            Toast.fire({
+              icon: "warning",
+              title: resp.message,
+            });
+          }
+        }
+      );
+
+
+    } else {
+
+      form.elements["vagoneta"].readOnly = true;
+
+
+      $.post(
+        "../../../app/control/create",
+        { registro: data, id_bascula: arr[2] },
+        function (resp_post) {
+
+          for (let index = 0; index < resp_post.total; index++) {
+            resp_post.suma -= resp_post.registro;
+          }
+
+          form.elements["total"].value = resp_post.suma;
+        }
+
+      );
+    }
+  } else {
+    Toast.fire({
+      icon: "error",
+      title: "Numero del Puerto de Serial no Establecido.",
+    });
+  }
+}
+
 function enviarData(id) {
   event.preventDefault();
 
@@ -140,8 +194,8 @@ function enviarData(id) {
   let data_2 = form.elements["bascula"].value;
   let data_3 = form.elements["vagoneta"].value;
 
-  let arr = id.split("-");
 
+  let arr = id.split("-");
   Swal.fire({
     title: "Esta seguro que desea cerrar la bascula?",
     showDenyButton: true,
@@ -149,9 +203,17 @@ function enviarData(id) {
     confirmButtonText: "Guardar",
     denyButtonText: `No Guardar`,
   }).then((result) => {
-    /* Read more about isConfirmed, isDenied below */
     if (result.isConfirmed) {
-      if (data_3 != " ") {
+      if (data_3 === "" || data_3 === null) {
+        Toast.fire({
+          icon: "error",
+          title:
+            "Debe primero cargar el valor de la bascula " +
+            arr[2] +
+            " " +
+            "antes de guardar.",
+        });
+      } else {
         $.ajax({
           type: "post",
           url: "/app/user/create",
@@ -168,17 +230,7 @@ function enviarData(id) {
             });
           },
         });
-      } else {
-        Toast.fire({
-          icon: "error",
-          title:
-            "Debe primero cargar el valor de la bascula " +
-            arr[2] +
-            " " +
-            "antes de guardar.",
-        });
       }
-      Swal.fire("Saved!", "", "success");
     } else if (result.isDenied) {
       Toast.fire({
         icon: "info",
@@ -188,75 +240,92 @@ function enviarData(id) {
   });
 }
 
+function restartServices() {
+  $.get("../../../app/user/restart", function (data) {
+    Toast.fire({
+      icon: "success",
+      title: "Servicios Reiniciados",
+    });
+  });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+var nombre = 0;
+var data = 0;
+var total = 0;
+var vagoneta = 0;
+let bascula = [nombre, data, total, vagoneta];
+localStorage.setItem('COM1', JSON.stringify(bascula));
+localStorage.setItem('COM2', JSON.stringify(bascula));
+localStorage.setItem('COM3', JSON.stringify(bascula));
+localStorage.setItem('COM4', JSON.stringify(bascula));
+localStorage.setItem('COM5', JSON.stringify(bascula));
+localStorage.setItem('COM6', JSON.stringify(bascula));
+localStorage.setItem('COM7', JSON.stringify(bascula));
+localStorage.setItem('COM8', JSON.stringify(bascula));
+let prueba = localStorage.getItem('COM2');
+let valor = JSON.parse(prueba)
+console.log(valor[0]);
+
+
+
+socket.on("port:error", function (error, ports) {
+
+  //Segmentacion de substrings
+
+  let part = error.value.split("\n");
+  let segm = "";
+  for (let i = 0; i < part.length; i++) {
+    segm = part[i].split(":");
+    let key = segm[0].substr(-1);
+  }
+
+  Toast.fire({
+    icon: "warning",
+    title: error.value,
+  });
+});
+
+
+
 function captNombre(id) {
   let form = document.getElementById(id);
   var typeId = form.elements["form-select-name"].value;
   form.elements["nombre"].value = typeId;
 }
 
-function captData(start, id, data) {
-  if (start) {
-    //segmentacion del arreglo
-    let form = document.getElementById(id);
-    var vagoneta = form.elements["vagoneta"].value;
-    let arr = id.split("-");
 
-    if (vagoneta == "") {
-      Swal.fire({
-        title: "Primer Registro de la vagoneta " + arr[2],
-        text: "Peso incial del proceso!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Si, Guardar!",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          $.post(
-            "../../../app/control/create",
-            { registro: data, id_bascula: arr[2] },
-            function (resp) {
-              //aca hacemos validacion de vagoneta en back para que este encendida
-              form.elements["data-" + arr[2]].value = "";
-              form.elements["vagoneta"].value = data;
-            }
-          );
-
-        } else {
-          form.elements["data-" + arr[2]].value = "";
-        }
-      });
-    } else {
-      $.post(
-        "../../../app/control/create",
-        { registro: data, id_bascula: arr[2] },
-        function (resp_post) {
-       
-
-          for (let index = 0; index < resp_post.total; index++) {
-            resp_post.suma -= resp_post.registro;
-          }
-
-          form.elements["total"].value = resp_post.suma;
-        }
-      );
-    }
-  } else {
-    console.log("Error");
-  }
-}
-
-function data_localstorage(arr){
+function data_localstorage(arr) {
 
   let key = arr[1].substr(-1);
-  let form = document.getElementById("form-user-"+key);
+  let form = document.getElementById("form-user-" + key);
   let aux = localStorage.getItem(arr[1]);
   let aux2 = JSON.parse(aux)
 
   var vagoneta = form.elements["vagoneta"].value;
   var nombre = form.elements["nombre"].value;
   var data = form.elements["data"].value;
-  var total = aux2[2]+(data-vagoneta);
+  var total = aux2[2] + (data - vagoneta);
   console.log(total);
   var vagoneta = form.elements["vagoneta"].value;
 
@@ -264,64 +333,64 @@ function data_localstorage(arr){
     case "COM20":
       let bascula1 = [nombre, data, total, vagoneta];
       localStorage.setItem('COM1', JSON.stringify(bascula1));
-      $(document).ready(function() {
-        document.getElementById("toast-text").innerHTML = "Bascula "+array[1]+" entro en funcionamiento";
+      $(document).ready(function () {
+        document.getElementById("toast-text").innerHTML = "Bascula " + array[1] + " entro en funcionamiento";
         $(".toast").toast("show");
       })
       break;
     case "COM21":
       let bascula2 = [nombre, data, total, vagoneta];
       localStorage.setItem('COM2', JSON.stringify(bascula2));
-      $(document).ready(function() {
-        document.getElementById("toast-text").innerHTML = "Bascula "+array[1]+" entro en funcionamiento";
+      $(document).ready(function () {
+        document.getElementById("toast-text").innerHTML = "Bascula " + array[1] + " entro en funcionamiento";
         $(".toast").toast("show");
       })
       break;
     case "COM22":
       let bascula3 = [nombre, data, total, vagoneta];
       localStorage.setItem('COM3', JSON.stringify(bascula3));
-      $(document).ready(function() {
-        document.getElementById("toast-text").innerHTML = "Bascula "+array[1]+" entro en funcionamiento";
+      $(document).ready(function () {
+        document.getElementById("toast-text").innerHTML = "Bascula " + array[1] + " entro en funcionamiento";
         $(".toast").toast("show");
       })
       break;
     case "COM23":
       let bascula4 = [nombre, data, total, vagoneta];
       localStorage.setItem('COM4', JSON.stringify(bascula4));
-      $(document).ready(function() {
-        document.getElementById("toast-text").innerHTML = "Bascula "+array[1]+" entro en funcionamiento";
+      $(document).ready(function () {
+        document.getElementById("toast-text").innerHTML = "Bascula " + array[1] + " entro en funcionamiento";
         $(".toast").toast("show");
       })
       break;
     case "COM24":
       let bascula5 = [nombre, data, total, vagoneta];
       localStorage.setItem('COM5', JSON.stringify(bascula5));
-      $(document).ready(function() {
-        document.getElementById("toast-text").innerHTML = "Bascula "+array[1]+" entro en funcionamiento";
+      $(document).ready(function () {
+        document.getElementById("toast-text").innerHTML = "Bascula " + array[1] + " entro en funcionamiento";
         $(".toast").toast("show");
       })
       break;
     case "COM25":
       let bascula6 = [nombre, data, total, vagoneta];
       localStorage.setItem('COM6', JSON.stringify(bascula6));
-      $(document).ready(function() {
-        document.getElementById("toast-text").innerHTML = "Bascula "+array[1]+" entro en funcionamiento";
+      $(document).ready(function () {
+        document.getElementById("toast-text").innerHTML = "Bascula " + array[1] + " entro en funcionamiento";
         $(".toast").toast("show");
       })
       break;
     case "COM26":
       let bascula7 = [nombre, data, total, vagoneta];
       localStorage.setItem('COM7', JSON.stringify(bascula7));
-      $(document).ready(function() {
-        document.getElementById("toast-text").innerHTML = "Bascula "+array[1]+" entro en funcionamiento";
+      $(document).ready(function () {
+        document.getElementById("toast-text").innerHTML = "Bascula " + array[1] + " entro en funcionamiento";
         $(".toast").toast("show");
       })
       break;
     case "COM27":
       let bascula8 = [nombre, data, total, vagoneta];
       localStorage.setItem('COM8', JSON.stringify(bascula8));
-      $(document).ready(function() {
-        document.getElementById("toast-text").innerHTML = "Bascula "+array[1]+" entro en funcionamiento";
+      $(document).ready(function () {
+        document.getElementById("toast-text").innerHTML = "Bascula " + array[1] + " entro en funcionamiento";
         $(".toast").toast("show");
       })
       break;
@@ -330,9 +399,9 @@ function data_localstorage(arr){
       break;
   }
 
-  function data_save(arr){
-    let form = document.getElementById("form-user-"+key);
-    
+  function data_save(arr) {
+    let form = document.getElementById("form-user-" + key);
+
     var vagoneta = 0;
     var nombre = 0;
     var data = 0;
@@ -377,4 +446,4 @@ function data_localstorage(arr){
         break;
     }
   }
-}
+}*/

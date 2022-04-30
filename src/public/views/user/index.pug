@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -10,7 +9,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
   <!-- CSS-->
   <link href="../../../css/style.css" rel="stylesheet" crossorigin="anonymous">
-  
+
   <!-- JavaScript Bundle with Popper -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
   <!-- FontAwesome -->
@@ -23,13 +22,17 @@
 
   script(src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous")
 
-  <!-- JS -->
   <script src="../../../js/funciones.js" crossorigin="anonymous"></script>
 
 
 </head>
 
 <body style="background-color: #0091AD;">
+
+  script.
+    window.addEventListener("beforeunload", function(event) {
+      event.returnValue =  "No se recomienda salir de la pagina, se perderan los datos"
+    });
 
 <div class="toast align-items-center" role="alert" aria-live="assertive" aria-atomic="true">
   <div class="d-flex">
@@ -47,7 +50,7 @@
       </a>
       <a style="color:white" href="">
         <i class="fab fa-github fa-2x"></i>
-      
+
       </a>
     </div>
   </nav>
@@ -56,8 +59,9 @@
 
     <div style ="padding:10px">
 
-    <a type="button" class="btn btn-warning" href='/'>Volver</a>
-      <i class="fas fa-question"></i>
+    <a type="button" class="btn btn-warning mr-2" href='/'>Volver</a>
+    <a type="button" class="btn btn-info" onclick="restartServices()">Reiniciar Servicios</a>
+
 
     </div>
     - cont = 1;
@@ -95,7 +99,7 @@
                   input(type="text" class="form-control"  id="total"  name="total" placeholder="Total" required readonly)
                 </div>
                 <div class="mb-3">
-                  input(type="text" class="form-control"  id="vagoneta" name="vagoneta"  placeholder="Vagoneta" required readonly )
+                  input(type="text" class="form-control"  id="vagoneta" name="vagoneta"  placeholder="Vagoneta" required )
                 </div>
                 <div class="mb-3" style="text-align:center">
                   h2(class="led" id="led-"+cont  name="led")
@@ -103,7 +107,7 @@
                 <div class="mb-3">
                   input(type="text" class="form-control"  id="bascula" name="bascula"  placeholder="Identificador" style=" visibility: hidden;" value=cont required readonly )
                 </div>
-                input(type="submit" class="btn btn-success" style="margin-right: 2px" value="Guardar")  
+                input(type="submit" class="btn btn-success" id="guardar-"+cont style="margin-right: 2px" value="Guardar")  
             </form> 
             </div>
           </div>
@@ -115,7 +119,7 @@
 
   </div>
   <br><br><br>
-  
+
 </body>
 
 </html>

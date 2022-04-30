@@ -7,4 +7,6 @@ router.get('/user/all', usuarioController.findAll);
 router.post('/user/create', usuarioController.create);
 // Retrieve a single employee with id
 router.get('/user/find/:id', usuarioController.findById);
+// Reinicar servicios
+router.get('/user/restart', usuarioController.restartServices);
 module.exports = router

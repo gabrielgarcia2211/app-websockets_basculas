@@ -2,10 +2,11 @@
 const { SerialPort } = require('serialport')
 const { ReadlineParser } = require('@serialport/parser-readline')
 
-function configPuerts (listName, baudRate, limiter) {
+function configPuerts(listName, baudRate, limiter) {
 
 
-    let tempList = [];
+    let listErrors = "";
+    let cont = 0;
 
     for (let i = 0; i < listName.length; i++) {
 
@@ -19,24 +20,42 @@ function configPuerts (listName, baudRate, limiter) {
         //parseamos los datos de entrada
         const parser = puerto.pipe(new ReadlineParser())
 
-        /*tempList.push({
-            'puerto': puerto,
-            'parser': parser,
-        })*/
 
-        parser.on('data', function(data){
-            console.log('serial:' + puerto.path + ":   " + data)
+        puerto.on('open', function (data) {
+
         })
-        puerto.on('error', console.log)
+
+        parser.on('data', function (data) {
+            let capData = 0;
+            let temp = data.trim().split(':');
+            if (temp[0] === 'Net') {
+                capData = temp[1];
+                io.emit('port:data', {
+                    value: capData.replace('Kg', '') + "/" + puerto.path
+                });
+
+            }
+        })
+
+        puerto.on('error', function (err) {
+            listErrors += err.message + "\n";
+            if (true) {
+                setTimeout(() => {
+                    io.emit('port:error', {
+                        value: listErrors,
+                        ports: [1,2,3,4,5,6,7,8]
+                    });
+                }, 1500)
+            }
+        })
 
 
     }
 
-   
+
 }
 
-
-module.exports = {configPuerts};
+module.exports = { configPuerts };
 
 
 
