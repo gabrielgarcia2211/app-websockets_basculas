@@ -21,19 +21,24 @@ function configPuerts(listName, baudRate, limiter) {
         const parser = puerto.pipe(new ReadlineParser())
 
 
-        puerto.on('open', function (data) {
-
-        })
+        //puerto.open();
 
         parser.on('data', function (data) {
-            let capData = 0;
-            let temp = data.trim().split(':');
+            let capData = "";
+            //let temp = data.trim().split(':');
+            let temp = data.trim().replace(' ', '').split(':');
+            //se crea variableconsole.log(temp)
             if (temp[0] === 'Net') {
                 capData = temp[1];
-                io.emit('port:data', {
-                    value: capData.replace('Kg', '') + "/" + puerto.path
-                });
+                
+                let aux = capData.trim();
 
+                console.log(aux );
+                
+                
+                io.emit('port:data', {
+                    value: aux.replace('Kg', '') + "/" + puerto.path
+                });
             }
         })
 
@@ -48,6 +53,14 @@ function configPuerts(listName, baudRate, limiter) {
                 }, 1500)
             }
         })
+
+        puerto.on('close', function (data) {
+            io.emit('port:disconnect', {
+                value: data,
+                port:  puerto.path
+            });
+        });
+
 
 
     }

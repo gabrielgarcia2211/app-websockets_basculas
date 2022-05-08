@@ -5,7 +5,7 @@ const express = require('express');
 const app = express();
 const http = require('http');
 const server = http.createServer(app);
-const { Server } = require("socket.io");
+const {Server} = require("socket.io");
 const io = new Server(server);
 
 
@@ -17,12 +17,11 @@ io.on('connection', (socket) => {
 });
 
 
-
-// Especificamos el puerto en una varibale port, incorporamos cors, express 
+// Especificamos el puerto en una varibale port, incorporamos cors, express
 // y la ruta a los archivo estáticos (la carpeta public)
 app.set("port", 3000);
 app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.urlencoded({extended: true}))
 app.use(express.static(path.join(__dirname, "./public")));
 
 
@@ -45,7 +44,6 @@ const controlControl = require('./routes/control.routes')
 // using as middleware
 app.use('/app', userControl)
 app.use('/app', controlControl)
-
 
 
 // Iniciamos el servidor en el puerto establecido por la variable port (3000)

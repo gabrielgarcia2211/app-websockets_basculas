@@ -1,3 +1,6 @@
 Lllamado de los puertos COM
 - funciones.js
 - usuario.controller.js
+
+---
+   // "start": "nodemon src/index.js",

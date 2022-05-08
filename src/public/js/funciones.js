@@ -83,6 +83,18 @@ socket.on("port:error", function (error) {
 
 });
 
+socket.on("port:disconnect", function (error) {
+  let key = error.port.substr(-1);
+  if(error.value.disconnected){
+    document.getElementById("led-" + key).style.background = '#FF4F23';
+    Toast.fire({
+      icon: "error",
+      title: "Vagoneta #" + key + ",asociada al puerto: " +error.port + ". Ha sido desconectada",
+    });
+  }
+  console.log(error.value)
+});
+
 function map(arr) {
   let key = arr[1].substr(-1);
   let dispatch = true;
@@ -241,12 +253,7 @@ function enviarData(id) {
 }
 
 function restartServices() {
-  $.get("../../../app/user/restart", function (data) {
-    Toast.fire({
-      icon: "success",
-      title: "Servicios Reiniciados",
-    });
-  });
+  $.get("../../../app/user/restart", function (data) {});
 }
 
 

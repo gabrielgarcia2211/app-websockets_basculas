@@ -81,8 +81,7 @@ function activateProceso(req, res) {
 };
 
 exports.restartServices = function (req, res) {
-    Ports.configPuerts(listName, baudRate, limiter);
-  
+    Ports.configPuerts(listName, baudRate, limiter);  
 };
 
 
