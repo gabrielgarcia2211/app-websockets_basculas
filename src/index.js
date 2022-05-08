@@ -41,9 +41,11 @@ app.get("/", (req, res) => {
 // Require employee routes
 const userControl = require('./routes/usuario.routes')
 const controlControl = require('./routes/control.routes')
+const reportControl = require('./routes/report.routes')
 // using as middleware
 app.use('/app', userControl)
 app.use('/app', controlControl)
+app.use('/app', reportControl)
 
 
 // Iniciamos el servidor en el puerto establecido por la variable port (3000)

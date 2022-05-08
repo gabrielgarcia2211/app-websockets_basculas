@@ -1,10 +1,10 @@
 'use strict';
-var dbConn = require('../../config/db.config');
+const dbConn = require('../../config/db.config');
 //Employee object create
 
 
 
-var Control = function (control) {
+const Control = function (control) {
 
     this.registro = control.registro;
     this.id_bascula = control.id_bascula;

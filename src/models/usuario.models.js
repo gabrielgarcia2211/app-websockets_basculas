@@ -1,8 +1,8 @@
 'use strict';
-var dbConn = require('./../../config/db.config');
+const dbConn = require('./../../config/db.config');
 //Employee object create
 
-var Usuario = function (user) {
+const Usuario = function (user) {
 
     this.nombre = user.nombre;
     this.id_bascula = user.bascula;

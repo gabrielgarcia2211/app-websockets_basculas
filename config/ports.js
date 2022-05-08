@@ -32,13 +32,10 @@ function configPuerts(listName, baudRate, limiter) {
                 capData = temp[1];
                 
                 let aux = capData.trim();
-
-                console.log(aux );
                 
-                
-                io.emit('port:data', {
+              /*  io.emit('port:data', {
                     value: aux.replace('Kg', '') + "/" + puerto.path
-                });
+                });*/
             }
         })
 
@@ -46,10 +43,10 @@ function configPuerts(listName, baudRate, limiter) {
             listErrors += err.message + "\n";
             if (true) {
                 setTimeout(() => {
-                    io.emit('port:error', {
+                   /* io.emit('port:error', {
                         value: listErrors,
                         ports: [1,2,3,4,5,6,7,8]
-                    });
+                    });*/
                 }, 1500)
             }
         })

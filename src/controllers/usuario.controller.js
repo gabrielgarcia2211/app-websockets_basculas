@@ -56,7 +56,7 @@ exports.create = function (req, res) {
                 Usuario.update(req.body.bascula, req.body.nombre, new Date(), function (err, usuario) {
                     if (err)
                         res.send(err);
-                    res.json({ error: false, message: 'Usuaerio successfully updated' });
+                    res.json({ error: false, message: 'Usuario Actualizado' });
                 });
             }
 
