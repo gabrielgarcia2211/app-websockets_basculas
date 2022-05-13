@@ -1,6 +1,12 @@
 const Usuario = require("../models/usuario.models");
 const Report = require("../models/report.models");
 const pdf = require('html-pdf');
+var excel = require('excel4node');
+
+
+
+let wb = new excel.Workbook();
+let ws = wb.addWorksheet("inventario");
 
 
 exports.findAll = function (req, res) {
@@ -10,7 +16,7 @@ exports.findAll = function (req, res) {
             res.send(err);
 
         let dataUser = usuario;
-        res.render("user/report", {dataUser});
+        res.render("user/report", { dataUser });
     });
 
 };
@@ -21,7 +27,7 @@ function formatoFecha(hoy) {
 
 exports.generatePDF = function (req, response) {
 
-    try{
+    try {
         Report.findByControl(req.body.fecha_inicio, req.body.fecha_fin, req.body.nombre, function (err, query) {
             if (err)
                 response.send(err);
@@ -31,7 +37,7 @@ exports.generatePDF = function (req, response) {
                 let now = new Date();
                 let template = "";
 
-                for (let i=0;i<query.length;i++){
+                for (let i = 0; i < query.length; i++) {
                     let temp1 = formatoFecha(query[i].fecha_registro)
                     let temp2 = formatoFecha(query[i].guardado)
                     template += `<tr>
@@ -97,23 +103,83 @@ exports.generatePDF = function (req, response) {
 
                 pdf.create(content).toFile('./reportes/' + now.getTime() + '.pdf', function (err, res) {
                     if (err) {
-                        console.log(err);
-                    } else {
-                        response.json({error: false, message: 'Reporte PDF Generado'});
+                        response.send(err);
                     }
                 });
-                response.json({error: false, message: 'Reporte PDF Generado'});
+
+                response.json({ error: false, message: 'Reporte PDF Generado' });
+
             } else {
-                response.json({error: false, message: 'No hay datos asociados en PDF'});
+                response.json({ error: false, message: 'No hay datos asociados en PDF' });
             }
 
         });
-    }catch (e) {
-        response.json({error: true, message: 'Error en generar el PDF'});
+    } catch (e) {
+        response.json({ error: true, message: 'Error en generar el PDF' });
     }
 
 
 };
+
+exports.generateExcel = function (req, response) {
+    let name = 'inventario';
+
+    try {
+        Report.findByControl(req.body.fecha_inicio, req.body.fecha_fin, req.body.nombre, function (err, query) {
+            if (err)
+                response.send(err);
+
+            if (query.length > 0) {
+
+
+                //header
+                let data = [
+                    'NOMBRE',
+                    'REGISTRO',
+                    'BASCULA',
+                    'FECHA DE REGISTRO',
+                    'GUARDADO'
+                ]
+
+                for (let i = 1; i <= data.length; i++) {
+                    ws.cell(1, i).string(data[i - 1]);
+                }
+
+
+                for (let i = 2; i <= (query.length + 1); i++) {
+
+                    query[i - 2].fecha_registro = formatoFecha(query[i - 2].fecha_registro);
+                    query[i - 2].guardado = formatoFecha(query[i - 2].guardado);
+                
+                    for (let j = 1; j <= Object.values(query[0]).length; j++) {
+                        let data = Object.values(query[i - 2])[j - 1];
+                
+                        if (j == 1 || j == 3) {
+                            ws.cell(i, j).string(data.toString());
+                        }
+                        else if (typeof data === "string") {
+                            ws.cell(i, j).string(data);
+                        } else {
+                            ws.cell(i, j).number(data);
+                        }
+                    }
+                
+                }
+
+                wb.write(`${name}.xlsx`, response);
+
+               // response.json({ error: false, message: 'Reporte EXCEL Generado' });
+
+            } else {
+                console.log('aca')
+                response.json({ error: true, message: 'No hay datos asociados en EXCEL' });
+            }
+
+        });
+    } catch (e) {
+        response.json({ error: true, message: 'Error en generar el EXCEL' });
+    }
+}
 
 
 

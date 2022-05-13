@@ -7,9 +7,11 @@ const http = require('http');
 const server = http.createServer(app);
 const {Server} = require("socket.io");
 const io = new Server(server);
-
+var fileDownload = require('js-file-download');  //npm i js-file-download
 
 global.io = io;
+global.fileDownload = fileDownload;
+
 
 
 io.on('connection', (socket) => {
