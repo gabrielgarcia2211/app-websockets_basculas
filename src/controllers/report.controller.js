@@ -78,7 +78,7 @@ exports.generatePDF = function (req, response) {
                         <body>
                             <nav class="navbar navbar-light bg">
                                  <a class="navbar-brand" href="index.html">
-                                    <img src="https://s3-us-west-2.amazonaws.com/devcodepro/media/tutorials/instalacion-de-nodejs-en-ubuntu-t1.jpg" alt="" width="100" height="50">
+                                    <img src="https://us.123rf.com/450wm/ylivdesign/ylivdesign1709/ylivdesign170903085/85533345-icono-de-carro-de-carb%C3%B3n-ilustraci%C3%B3n-de-dibujos-animados-de-icono-de-vector-de-carro-de-carb%C3%B3n-para-.jpg" alt="" width="100" height="50">
                                  </a>
                              </nav>
                             <h1>Resultado de PDF</h1>

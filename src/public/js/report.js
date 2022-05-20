@@ -36,7 +36,7 @@ function generatePDF() {
                     icon: "warning",
                     title: resp.message,
                 });
-                setTimeout(function () { location.reload() }, 3000)
+                //setTimeout(function () { location.reload() }, 3000)
             } else {
                 Toast.fire({
                     icon: "error",
@@ -92,7 +92,7 @@ function generateExcel() {
             document.body.appendChild(fileLink);
     
             fileLink.click();
-            setTimeout(function () {location.reload()}, 4000)
+            //setTimeout(function () {location.reload()}, 4000)
         } else {
             response.data.text().then(text => {
                 const res = JSON.parse(text);

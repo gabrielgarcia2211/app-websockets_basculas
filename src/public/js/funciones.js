@@ -1,15 +1,16 @@
 var socket = io();
 
 let listName = [
-    'COM1',
-    'COM2',
-    'COM3',
-    'COM4',
-    'COM5',
-    'COM6',
-    'COM7',
-    'COM8',
+  'COM21',
+  'COM22',
+  'COM23',
+  'COM24',
+  'COM25',
+  'COM26',
+  'COM27',
+  'COM28',
 ]
+
 
 
 $(document).ready(function () {
@@ -261,182 +262,3 @@ function restartServices() {
 }
 
 
-/*
-
-var nombre = 0;
-var data = 0;
-var total = 0;
-var vagoneta = 0;
-let bascula = [nombre, data, total, vagoneta];
-localStorage.setItem('COM1', JSON.stringify(bascula));
-localStorage.setItem('COM2', JSON.stringify(bascula));
-localStorage.setItem('COM3', JSON.stringify(bascula));
-localStorage.setItem('COM4', JSON.stringify(bascula));
-localStorage.setItem('COM5', JSON.stringify(bascula));
-localStorage.setItem('COM6', JSON.stringify(bascula));
-localStorage.setItem('COM7', JSON.stringify(bascula));
-localStorage.setItem('COM8', JSON.stringify(bascula));
-let prueba = localStorage.getItem('COM2');
-let valor = JSON.parse(prueba)
-console.log(valor[0]);
-
-
-
-socket.on("port:error", function (error, ports) {
-
-  //Segmentacion de substrings
-
-  let part = error.value.split("\n");
-  let segm = "";
-  for (let i = 0; i < part.length; i++) {
-    segm = part[i].split(":");
-    let key = segm[0].substr(-1);
-  }
-
-  Toast.fire({
-    icon: "warning",
-    title: error.value,
-  });
-});
-
-
-
-function captNombre(id) {
-  let form = document.getElementById(id);
-  var typeId = form.elements["form-select-name"].value;
-  form.elements["nombre"].value = typeId;
-}
-
-
-function data_localstorage(arr) {
-
-  let key = arr[1].substr(-1);
-  let form = document.getElementById("form-user-" + key);
-  let aux = localStorage.getItem(arr[1]);
-  let aux2 = JSON.parse(aux)
-
-  var vagoneta = form.elements["vagoneta"].value;
-  var nombre = form.elements["nombre"].value;
-  var data = form.elements["data"].value;
-  var total = aux2[2] + (data - vagoneta);
-  console.log(total);
-  var vagoneta = form.elements["vagoneta"].value;
-
-  switch (arr[1]) {
-    case "COM20":
-      let bascula1 = [nombre, data, total, vagoneta];
-      localStorage.setItem('COM1', JSON.stringify(bascula1));
-      $(document).ready(function () {
-        document.getElementById("toast-text").innerHTML = "Bascula " + array[1] + " entro en funcionamiento";
-        $(".toast").toast("show");
-      })
-      break;
-    case "COM21":
-      let bascula2 = [nombre, data, total, vagoneta];
-      localStorage.setItem('COM2', JSON.stringify(bascula2));
-      $(document).ready(function () {
-        document.getElementById("toast-text").innerHTML = "Bascula " + array[1] + " entro en funcionamiento";
-        $(".toast").toast("show");
-      })
-      break;
-    case "COM22":
-      let bascula3 = [nombre, data, total, vagoneta];
-      localStorage.setItem('COM3', JSON.stringify(bascula3));
-      $(document).ready(function () {
-        document.getElementById("toast-text").innerHTML = "Bascula " + array[1] + " entro en funcionamiento";
-        $(".toast").toast("show");
-      })
-      break;
-    case "COM23":
-      let bascula4 = [nombre, data, total, vagoneta];
-      localStorage.setItem('COM4', JSON.stringify(bascula4));
-      $(document).ready(function () {
-        document.getElementById("toast-text").innerHTML = "Bascula " + array[1] + " entro en funcionamiento";
-        $(".toast").toast("show");
-      })
-      break;
-    case "COM24":
-      let bascula5 = [nombre, data, total, vagoneta];
-      localStorage.setItem('COM5', JSON.stringify(bascula5));
-      $(document).ready(function () {
-        document.getElementById("toast-text").innerHTML = "Bascula " + array[1] + " entro en funcionamiento";
-        $(".toast").toast("show");
-      })
-      break;
-    case "COM25":
-      let bascula6 = [nombre, data, total, vagoneta];
-      localStorage.setItem('COM6', JSON.stringify(bascula6));
-      $(document).ready(function () {
-        document.getElementById("toast-text").innerHTML = "Bascula " + array[1] + " entro en funcionamiento";
-        $(".toast").toast("show");
-      })
-      break;
-    case "COM26":
-      let bascula7 = [nombre, data, total, vagoneta];
-      localStorage.setItem('COM7', JSON.stringify(bascula7));
-      $(document).ready(function () {
-        document.getElementById("toast-text").innerHTML = "Bascula " + array[1] + " entro en funcionamiento";
-        $(".toast").toast("show");
-      })
-      break;
-    case "COM27":
-      let bascula8 = [nombre, data, total, vagoneta];
-      localStorage.setItem('COM8', JSON.stringify(bascula8));
-      $(document).ready(function () {
-        document.getElementById("toast-text").innerHTML = "Bascula " + array[1] + " entro en funcionamiento";
-        $(".toast").toast("show");
-      })
-      break;
-    default:
-      dispatch = false;
-      break;
-  }
-
-  function data_save(arr) {
-    let form = document.getElementById("form-user-" + key);
-
-    var vagoneta = 0;
-    var nombre = 0;
-    var data = 0;
-    var total = 0;
-    var vagoneta = 0;
-
-    switch (arr[1]) {
-      case "COM0":
-        let aux1 = localStorage.getItem(arr[1]);
-        let bascula1 = JSON.parse(aux);
-        break;
-      case "COM21":
-        let aux2 = localStorage.getItem(arr[1]);
-        let bascula2 = JSON.parse(aux);
-        break;
-      case "COM22":
-        let aux3 = localStorage.getItem(arr[1]);
-        let bascula3 = JSON.parse(aux);
-        break;
-      case "COM23":
-        let aux4 = localStorage.getItem(arr[1]);
-        let bascula4 = JSON.parse(aux);
-        break;
-      case "COM24":
-        let aux5 = localStorage.getItem(arr[1]);
-        let bascula5 = JSON.parse(aux);
-        break;
-      case "COM25":
-        let aux6 = localStorage.getItem(arr[1]);
-        let bascula6 = JSON.parse(aux);
-        break;
-      case "COM26":
-        let aux7 = localStorage.getItem(arr[1]);
-        let bascula7 = JSON.parse(aux);
-        break;
-      case "COM27":
-        let aux8 = localStorage.getItem(arr[1]);
-        let bascula8 = JSON.parse(aux);
-        break;
-      default:
-        dispatch = false;
-        break;
-    }
-  }
-}*/

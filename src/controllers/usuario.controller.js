@@ -5,16 +5,7 @@ const Ports = require('../../config/ports')
 let dataUser = null;
 let baudRate = 9600;
 //lista predefindidad de puertos
-let listName = [
-    'COM1',
-    'COM2',
-    'COM3',
-    'COM4',
-    'COM5',
-    'COM6',
-    'COM7',
-    'COM8',
-]
+
 
 let limiter = '\r\n'
 
@@ -77,10 +68,30 @@ exports.findById = function (req, res) {
 };
 
 function activateProceso(req, res) {
+    let listName = [
+        'COM21',
+        'COM22',
+        'COM23',
+        'COM24',
+        'COM25',
+        'COM26',
+        'COM27',
+        'COM28',
+    ]
     Ports.configPuerts(listName, baudRate, limiter);
 };
 
 exports.restartServices = function (req, res) {
+    let listName = [
+        'COM21',
+        'COM22',
+        'COM23',
+        'COM24',
+        'COM25',
+        'COM26',
+        'COM27',
+        'COM28',
+    ]
     Ports.configPuerts(listName, baudRate, limiter);  
 };
 

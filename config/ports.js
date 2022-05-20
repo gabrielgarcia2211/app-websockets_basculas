@@ -1,4 +1,3 @@
-'use strict';
 const { SerialPort } = require('serialport')
 const { ReadlineParser } = require('@serialport/parser-readline')
 
@@ -41,14 +40,14 @@ function configPuerts(listName, baudRate, limiter) {
 
         puerto.on('error', function (err) {
             listErrors += err.message + "\n";
-            if (true) {
-                setTimeout(() => {
-                    io.emit('port:error', {
-                        value: listErrors,
-                        ports: [1,2,3,4,5,6,7,8]
-                    });
-                }, 1500)
-            }
+        
+            setTimeout(() => {
+                io.emit('port:error', {
+                     value: listErrors,
+                     ports: [1,2,3,4,5,6,7,8]
+                });
+            }, 1000)
+            
         })
 
         puerto.on('close', function (data) {
