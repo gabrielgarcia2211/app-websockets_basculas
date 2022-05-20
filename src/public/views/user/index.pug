@@ -27,7 +27,7 @@
 
 </head>
 
-<body style="background-color: #0091AD;">
+<body class="bg-warning">
 
   script.
     window.addEventListener("beforeunload", function(event) {
@@ -45,11 +45,10 @@
 
   <nav class="navbar navbar-light bg" style="background-color: #26262e;">
     <div class="container">
-      <a class="navbar-brand" href="index.html">
-        <img src="https://s3-us-west-2.amazonaws.com/devcodepro/media/tutorials/instalacion-de-nodejs-en-ubuntu-t1.jpg" alt="" width="100" height="50">
+      <a class="navbar-brand" href="">
+        <img src="/img/logo.jpg" alt="" width="120" height="50">
       </a>
       <a style="color:white" href="">
-        <i class="fab fa-github fa-2x"></i>
         <ul class="nav justify-content-end">
           <li class="nav-item">
             <a class="nav-link" style="color:white" href="/app/user/all/">Basculas</a>
@@ -67,8 +66,8 @@
 
     <div style ="padding:10px">
 
-    <a type="button" class="btn btn-warning mr-2" href='/'>Volver</a>
-    <a type="button" class="btn btn-info" onclick="restartServices()">Reiniciar Servicios</a>
+    <a type="button" class="btn btn-Dark mr-2" href='/'>Volver</a>
+    <a type="button" class="btn btn-Dark" onclick="restartServices()">Reiniciar Servicios</a>
 
 
     </div>
@@ -81,6 +80,9 @@
           <div class="card">
             <div class="card-header">
               <p><b>#{cont} de Bascula</b></p>
+              <div>
+                <img src="/img/vagoneta.jpg" alt="" width="100" height="70">
+              </div> 
             </div>
             <div class="card-body">
             form(id="form-user-"+cont, onsubmit="enviarData(this.id)",  onchange="")
