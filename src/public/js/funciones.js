@@ -29,7 +29,7 @@ function init() {
 function sesion() {
     var user = document.getElementById('user').value;
     var password = document.getElementById('password').value;
-    if (user === "admin" && password === "admin") {
+    if (user === "admin" && password === "prominerq123") {
         window.location.href = "../app/user/all/";
     } else {
         window.alert("error");

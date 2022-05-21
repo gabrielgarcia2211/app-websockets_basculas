@@ -26,9 +26,9 @@ function formatoFecha(hoy) {
 }
 
 exports.generatePDF = function (req, response) {
-
+ 
     try {
-        Report.findByControl(req.body.fecha_inicio, req.body.fecha_fin, req.body.nombre, function (err, query) {
+        Report.findByControl(req.body.fecha_inicio, req.body.fecha_fin, req.body.id, function (err, query) {
             if (err)
                 response.send(err);
 
@@ -85,7 +85,7 @@ exports.generatePDF = function (req, response) {
                             <table class="tftable">
                               <tr>
                                 <th>Nombre</th>
-                                <th>Registro</th>
+                                <th>Registro - Kg</th>
                                 <th>Bascula</th>
                                 <th>Fecha de registro del dato</th>
                                 <th>Fecha de registro del cierre</th>
@@ -125,7 +125,7 @@ exports.generateExcel = function (req, response) {
     let name = 'inventario';
 
     try {
-        Report.findByControl(req.body.fecha_inicio, req.body.fecha_fin, req.body.nombre, function (err, query) {
+        Report.findByControl(req.body.fecha_inicio, req.body.fecha_fin, req.body.id, function (err, query) {
             if (err)
                 response.send(err);
 
@@ -134,10 +134,10 @@ exports.generateExcel = function (req, response) {
 
                 //header
                 let data = [
-                    'NOMBRE',
-                    'REGISTRO',
-                    'BASCULA',
                     'FECHA DE REGISTRO',
+                    'REGISTRO - Kg',
+                    'BASCULA',
+                    'NOMBRE',
                     'GUARDADO'
                 ]
 

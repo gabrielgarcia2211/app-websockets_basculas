@@ -16,12 +16,12 @@ const Toast = Swal.mixin({
 function generatePDF() {
     let start_day = document.getElementById("start-day").value;
     let end_day = document.getElementById("end-day").value;
-    let name = document.getElementById("form-select-name").value;
-    if (name === "Selecciona el nombre") {
+    let id = document.getElementById("form-select-name").value;
+    if (id === "Selecciona la bascula") {
         Swal.fire({
             position: 'top-end',
             icon: 'error',
-            title: 'Debe seleccionar un usuario',
+            title: 'Debe seleccionar una bascula',
             showConfirmButton: false,
             timer: 1500
         })
@@ -29,7 +29,7 @@ function generatePDF() {
     }
     $.post(
         "../../../app/report/pdf",
-        { fecha_inicio: start_day, fecha_fin: end_day, nombre: name },
+        { fecha_inicio: start_day, fecha_fin: end_day, id: id },
         function (resp) {
             if (!resp.error) {
                 Toast.fire({
@@ -51,12 +51,12 @@ function generatePDF() {
 function generateExcel() {
     let start_day = document.getElementById("start-day").value;
     let end_day = document.getElementById("end-day").value;
-    let name = document.getElementById("form-select-name").value;
-    if (name === "Selecciona el nombre") {
+    let id = document.getElementById("form-select-name").value;
+    if (id === "Selecciona la bascula") {
         Swal.fire({
             position: 'top-end',
             icon: 'error',
-            title: 'Debe seleccionar un usuario',
+            title: 'Debe seleccionar una bascula',
             showConfirmButton: false,
             timer: 1500
         })
@@ -69,7 +69,7 @@ function generateExcel() {
         },
         responseType: 'blob',
     }
-    let formData = { fecha_inicio: start_day, fecha_fin: end_day, nombre: name };
+    let formData = { fecha_inicio: start_day, fecha_fin: end_day, id: id };
     axios.post("../../../app/report/excel", formData, postConfig).then((response) => {
 
         const jsonMimeType = 'application/json';
